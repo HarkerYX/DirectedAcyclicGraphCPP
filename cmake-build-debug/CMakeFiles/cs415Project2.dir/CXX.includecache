@@ -1,0 +1,36 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/guygreenleaf/CLionProjects/cs415Project2/DirectedAcyclicGraph.hpp
+vector
+-
+adjNode.hpp
+/Users/guygreenleaf/CLionProjects/cs415Project2/adjNode.hpp
+
+/Users/guygreenleaf/CLionProjects/cs415Project2/adjNode.hpp
+
+/Users/guygreenleaf/CLionProjects/cs415Project2/main.cpp
+iostream
+-
+iostream
+-
+vector
+-
+sstream
+-
+fstream
+-
+string
+-
+list
+-
+map
+-
+DirectedAcyclicGraph.hpp
+/Users/guygreenleaf/CLionProjects/cs415Project2/DirectedAcyclicGraph.hpp
+
