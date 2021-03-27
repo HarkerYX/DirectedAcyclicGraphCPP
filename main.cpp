@@ -42,12 +42,12 @@ std::vector<CustomerInfo *>createCustomerInfoVector(int argc, char *argv[]){
     return custInfo;
 }
 
-
+//just redo this shit tomorrow tbh.....
 void topSort(DirectedAcyclicGraph graph){
     std::queue<adjNode *> adjQueue;
     //Might need to +2 on the nodeCount!
     std::vector<int> count (graph.nodeCount(), 0);
-    std::vector<adjNode *> nList;
+    std::vector<int> nList;
     int v;
 
     for(v=0; v<graph.nodeCount(); v++){count.at(v) = 0;}
@@ -56,7 +56,7 @@ void topSort(DirectedAcyclicGraph graph){
         nList = graph.neighbors(v);
 
         for(int i=0; i < nList.size(); i++){
-            count.at(nList.at(i)->getClientNumber()-1)++;
+            count.at(nList.at(i)-1)++;
         }
     }
     for(v = 0; v<graph.nodeCount(); v++){
@@ -68,15 +68,16 @@ void topSort(DirectedAcyclicGraph graph){
     while(adjQueue.size() > 0){
         auto *print = adjQueue.front();
 
-//        std::cout << "[" << print->getStartDate() << ", "<< print->getEndDate() << "]" << std::endl;
+        std::cout << "[" << print->getStartDate() << ", "<< print->getEndDate() << "]" << std::endl;
     std::cout << print->getWeight() << std::endl;
+    std::cout << "----------------------\n";
         adjQueue.pop();
         nList = graph.neighbors(v);
 
         for(int i = 0; i< nList.size(); i++){
-            count.at(nList.at(i)->getClientNumber())--;
-            if(count.at(nList.at(i)->getClientNumber()) == 0){
-                adjQueue.push(nList.at(i));
+            count.at(nList.at(i))--;
+            if(count.at(nList.at(i)) == 0){
+                adjQueue.push(graph.getAdjList().at(nList.at(i)));
             }
         }
     }
@@ -101,14 +102,14 @@ int main(int argc, char *argv[])
 //
 //    std::cout << neighborVector.at(0)->getClientNumber() << std::endl;
 
-    for(int i = 0; i<dagGraph.nodeCount()+2; i++){
-        std::vector<adjNode *> neighbVec = dagGraph.neighbors(i);
-        for(auto & j : neighbVec){
-            std::cout << "[" << j->getStartDate() << ", " << j->getEndDate() << "]  " << "----> ";
-
-        }
-        std::cout << "|" << std::endl;
-    }
+//    for(int i = 0; i<dagGraph.nodeCount()+2; i++){
+//        std::vector<adjNode *> neighbVec = dagGraph.neighbors(i);
+//        for(auto & j : neighbVec){
+//            std::cout << "[" << j->getStartDate() << ", " << j->getEndDate() << "]  " << "----> ";
+//
+//        }
+//        std::cout << "|" << std::endl;
+//    }
 
     std::cout << "TOP SORT!\n\n";
 

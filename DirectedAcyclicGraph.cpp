@@ -86,18 +86,30 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
 
 }
 
+//might need to change, have it -2 to account for start and ending nodes atm.
+
 unsigned long long DirectedAcyclicGraph::nodeCount() {return adjList.size()-2;}
 
-std::vector<adjNode *> DirectedAcyclicGraph::neighbors(int clientNum){
-    std::vector<adjNode *> neighborVec;
+std::vector<int> DirectedAcyclicGraph::neighbors(int clientNum){
+    std::vector<int> result;
+    adjNode *getNeighborsOf = adjList.at(clientNum)->next();
 
-    adjNode *getNeighborsOf = adjList.at(clientNum);
 
     while(getNeighborsOf != nullptr){
-        neighborVec.emplace_back(getNeighborsOf);
+        result.emplace_back(getNeighborsOf->getClientNumber());
         getNeighborsOf = getNeighborsOf->next();
     }
-    return neighborVec;
+
+    return result;
+//    std::vector<adjNode *> neighborVec;
+//
+//    adjNode *getNeighborsOf = adjList.at(clientNum);
+//
+//    while(getNeighborsOf != nullptr){
+//        neighborVec.emplace_back(getNeighborsOf);
+//        getNeighborsOf = getNeighborsOf->next();
+//    }
+//    return neighborVec;
 }
 
 std::vector<adjNode *> DirectedAcyclicGraph::getAdjList(){

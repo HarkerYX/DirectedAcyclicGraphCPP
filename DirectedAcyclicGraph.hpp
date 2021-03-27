@@ -18,7 +18,7 @@ class DirectedAcyclicGraph{
 
         unsigned long long nodeCount();
 
-        std::vector<adjNode *> neighbors(int clientNum);
+        std::vector<int> neighbors(int clientNum);
 
         bool getValue(int n);
 
