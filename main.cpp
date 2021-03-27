@@ -6,83 +6,119 @@
 #include <fstream>
 #include <string>
 #include <list>
-
 #include <map>
+#include <queue>
+#include "CustomerInfo.hpp"
 #include "DirectedAcyclicGraph.hpp"
 
+//I did a project similar to this in CS315. A lot of similar concepts are brought into this project.
 
 
 
+//Creates the vector of customer info.
+std::vector<CustomerInfo *>createCustomerInfoVector(int argc, char *argv[]){
+    std::vector<CustomerInfo *> custInfo;
+    int startDate, endDate;
+    double weight;
 
-// stores adjacency list items
-
-// structure to store edges
-struct graphEdge {
-    int start_ver, end_ver, weight;
-
-};
-
-
-
-
-
-
-int main()
-{
-
-
-
-    std::ifstream input( "data2.txt" );
-//    std::string line;
-    std::vector< std::vector<int> > all_integers;
-
-    std::vector<std::vector<int>> dagMatrix;
-
-    int start, end, cost;
-
-
-    while(input >> start >> end >> cost)
-    {
-        std::vector<int> toappend;
-        toappend.push_back(start);
-        toappend.push_back(end);
-        toappend.push_back(cost);
-
-        all_integers.push_back(toappend);
-
+    int custNumber = 1;
+    if( argc != 2) {
+        std::cout << "usage: " << argv[0] << " nameOfAnInputFile\n";
+        exit(1);
+    }
+    std::ifstream inputStream;
+    inputStream.open(argv[1], std::ios::in);
+    if( ! inputStream.is_open()) {
+        std::cout << "Unable top open " << argv[1] << ". Terminating...";
+        perror("Error when attempting to open the input file.");
+        exit(1);
     }
 
-//    std::vector<std::list<std::tuple<int, int, int>>> dagList(all_integers.size());
+    while(inputStream >> startDate && inputStream >> endDate && inputStream >> weight){
+        auto *customersInfo = new CustomerInfo(custNumber, startDate, endDate, weight);
+        custNumber += 1;
+        custInfo.push_back(customersInfo);
+    }
+    return custInfo;
+}
 
-    dagMatrix.resize(all_integers.size(), std::vector<int>(all_integers.size()));
 
-    std::cout << dagMatrix.size() << std::endl;
-//    std::ifstream input2( "data2.txt" );
-//
-//    while(input2 >> start >> end >> cost) {
-//
-//        std::cout << start << " " << end << " " << cost << endl;
-//    }
-//        for (int i=0; i<all_integers.size()-1; i++){
-//        cout << all_integers.at(i).at(0)  << " " <<  all_integers.at(i).at(1) << " " << all_integers.at(i).at(2) << endl;
-//    }
-//
-//
-//
-//    int numVertices = all_integers.size();      // Number of vertices in the graph
-//
-//
-//
-    DirectedAcyclicGraph graph(all_integers);
+void topSort(DirectedAcyclicGraph graph){
+    std::queue<adjNode *> adjQueue;
+    //Might need to +2 on the nodeCount!
+    std::vector<int> count (graph.nodeCount(), 0);
+    std::vector<adjNode *> nList;
+    int v;
 
-    for(int i = 0; i < graph.getAdjList().size(); i++){
-        for(int j = 0; j< graph.getAdjList().size(); j++){
-            std::cout << graph.getAdjList().at(i).at(j).getMarked();
-            if(j == 4){
-                std::cout << std::endl;
+    for(v=0; v<graph.nodeCount(); v++){count.at(v) = 0;}
+
+    for(v=1; v<graph.nodeCount(); v++){
+        nList = graph.neighbors(v);
+
+        for(int i=0; i < nList.size(); i++){
+            count.at(nList.at(i)->getClientNumber()-1)++;
+        }
+    }
+    for(v = 0; v<graph.nodeCount(); v++){
+        if(count.at(v) == 0){
+            adjQueue.push(graph.getAdjList().at(v));
+        }
+
+    }
+    while(adjQueue.size() > 0){
+        auto *print = adjQueue.front();
+
+//        std::cout << "[" << print->getStartDate() << ", "<< print->getEndDate() << "]" << std::endl;
+    std::cout << print->getWeight() << std::endl;
+        adjQueue.pop();
+        nList = graph.neighbors(v);
+
+        for(int i = 0; i< nList.size(); i++){
+            count.at(nList.at(i)->getClientNumber())--;
+            if(count.at(nList.at(i)->getClientNumber()) == 0){
+                adjQueue.push(nList.at(i));
             }
         }
     }
+}
+
+
+
+int main(int argc, char *argv[])
+{
+
+    //Put all customers info into a vector
+    std::vector<CustomerInfo *> allCustomerInfo = createCustomerInfoVector(argc, argv);
+    DirectedAcyclicGraph dagGraph(allCustomerInfo);
+
+    std::cout << "testBuilt" << std::endl;
+
+    std::cout << "Node Count: " <<  dagGraph.nodeCount() << std::endl;
+
+    std::cout << "\n------------------\n\nAdjacency List:\n\n";
+//
+//    std::vector<adjNode *> neighborVector = dagGraph.neighbors(1);
+//
+//    std::cout << neighborVector.at(0)->getClientNumber() << std::endl;
+
+    for(int i = 0; i<dagGraph.nodeCount()+2; i++){
+        std::vector<adjNode *> neighbVec = dagGraph.neighbors(i);
+        for(auto & j : neighbVec){
+            std::cout << "[" << j->getStartDate() << ", " << j->getEndDate() << "]  " << "----> ";
+
+        }
+        std::cout << "|" << std::endl;
+    }
+
+    std::cout << "TOP SORT!\n\n";
+
+    topSort(dagGraph);
+
+//    for(int i = 0; i < dagGraph.answer.size(); i++){
+//        std::cout << dagGraph.answer.at(i) << std::endl;
+//    }
+
+
     return 0;
 }
 

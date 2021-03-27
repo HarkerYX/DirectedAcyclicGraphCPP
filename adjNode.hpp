@@ -8,7 +8,7 @@
 
 class adjNode {
 public:
-    adjNode(int client, int startDate, int endDate, int weight);
+    adjNode(int client, int startDate, int endDate, double weight);
     adjNode();
 
     void setMarked();
@@ -16,7 +16,7 @@ public:
     int getClientNumber();
     int getStartDate();
     int getEndDate();
-    int getWeight();
+    double getWeight();
     bool getMarked();
 
     void setClientNumber(int client);
@@ -24,14 +24,24 @@ public:
     void setEndDate(int endDate);
     void setWeight(int weight);
 
+    void setStartNode();
+    void setEndNode();
+
+    adjNode *next();
+    void next (adjNode *node);
+
 
 
 private:
     int _clientNumber;
     int _startDate;
     int _endDate;
-    int _weight;
+    double _weight;
+
     bool _isMarked;
+
+    adjNode *_next;
+
 };
 
 #endif //CS415PROJECT2_ADJNODE_HPP
