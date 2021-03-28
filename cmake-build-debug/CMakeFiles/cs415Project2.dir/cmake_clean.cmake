@@ -1,13 +1,11 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/cs415Project2.dir/CustomerInfo.cpp.obj"
-  "CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.obj"
-  "CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.obj"
-  "CMakeFiles/cs415Project2.dir/adjNode.cpp.obj"
-  "CMakeFiles/cs415Project2.dir/main.cpp.obj"
-  "cs415Project2.exe"
-  "cs415Project2.exe.manifest"
+  "CMakeFiles/cs415Project2.dir/CustomerInfo.cpp.o"
+  "CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.o"
+  "CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.o"
+  "CMakeFiles/cs415Project2.dir/adjNode.cpp.o"
+  "CMakeFiles/cs415Project2.dir/main.cpp.o"
+  "cs415Project2"
   "cs415Project2.pdb"
-  "libcs415Project2.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.

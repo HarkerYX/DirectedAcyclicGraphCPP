@@ -66,15 +66,29 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
 
     //populate start
 
-
-    for(int i = 1; i < startVec.size()-1; i++) {
-        if(startVec.at(i)==0) {
-            adjNode *insertNew = new adjNode(adjList.at(i)->getClientNumber(), adjList.at(i)->getStartDate(), adjList.at(i)->getEndDate(), adjList.at(i)->getWeight(), 2);
-            insertNew->next(adjList.at(0)->next());
-            adjList.at(0)->next(insertNew);
+    bool comp = false;
+    for(int i = 1; i < adjList.size()-1; i++){
+        comp = false;
+        for(int j = 1; j<adjList.size()-1; j++){
+            if(adjList.at(i)->getStartDate() > adjList.at(j)->getEndDate()){
+                comp = true;
+            }
         }
-
+        if(!comp){
+            auto *newStart = new adjNode(adjList.at(i)->getClientNumber(), adjList.at(i)->getStartDate(), adjList.at(i)->getEndDate(), adjList.at(i)->getWeight(), 1);
+            newStart->next(adjList.at(0)->next());
+            adjList.at(0)->next(newStart);
+        }
     }
+
+//    for(int i = 1; i < startVec.size()-1; i++) {
+//        if(startVec.at(i)==0) {
+//            adjNode *insertNew = new adjNode(adjList.at(i)->getClientNumber(), adjList.at(i)->getStartDate(), adjList.at(i)->getEndDate(), adjList.at(i)->getWeight(), 2);
+//            insertNew->next(adjList.at(0)->next());
+//            adjList.at(0)->next(insertNew);
+//        }
+//
+//    }
 
 //
 //    auto *currentStartPlace = adjList.at(0);
