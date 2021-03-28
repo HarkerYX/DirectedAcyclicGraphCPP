@@ -147,6 +147,7 @@ int main(int argc, char *argv[]) {
 
     topSortDFS(dagGraph);
 
+    std::cout << "Neighbors:\n\n";
     auto neighbs = dagGraph.neighbors(1);
     for (auto j : neighbs) {
     std::cout << "Neighbors of index 1: " << j << std::endl;
