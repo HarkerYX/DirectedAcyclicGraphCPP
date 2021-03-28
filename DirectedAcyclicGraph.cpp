@@ -70,7 +70,7 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
     for(int i = 1; i < adjList.size()-1; i++){
         comp = false;
         for(int j = 1; j<adjList.size()-1; j++){
-            if(adjList.at(i)->getStartDate() > adjList.at(j)->getEndDate()){
+            if(adjList.at(i)->getStartDate() >= adjList.at(j)->getEndDate()){
                 comp = true;
             }
         }
