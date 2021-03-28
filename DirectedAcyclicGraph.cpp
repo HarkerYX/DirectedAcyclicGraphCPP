@@ -34,7 +34,7 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
             //Use this to track start nodes
             startVec.resize(adjList.size() , 0);
 
-            if (adjList.at(i)->getStartDate() < adjList.at(j)->getStartDate() && i != 0 && i != adjList.size() && adjList.at(j)->) {
+            if (adjList.at(i)->getStartDate() < adjList.at(j)->getStartDate() && i != 0 && i != adjList.size()) {
 
                 startVec.at(j)++; }
 
