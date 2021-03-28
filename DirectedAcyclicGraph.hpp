@@ -20,12 +20,16 @@ class DirectedAcyclicGraph{
 
         std::vector<int> neighbors(int clientNum);
 
+        std::vector<int> startVec;
         bool getValue(int n);
+        void setValue(int n);
 
         void topSort();
         void topSortUtil(int v);
         std::vector<int> answer;
         std::vector<adjNode *> getAdjList();
+
+        int getNodeType(int v);
 
     private:
         std::vector<adjNode *> adjList;

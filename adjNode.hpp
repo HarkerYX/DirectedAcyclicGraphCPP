@@ -8,7 +8,7 @@
 
 class adjNode {
 public:
-    adjNode(int client, int startDate, int endDate, double weight);
+    adjNode(int client, int startDate, int endDate, double weight, int nodeType);
     adjNode();
 
     void setMarked();
@@ -23,6 +23,16 @@ public:
     void setStartDate(int startDate);
     void setEndDate(int endDate);
     void setWeight(int weight);
+
+    void makeStart(){_isStart = true;};
+    void makeEnd(){_isEnd = true;};
+    void makeAdj(){_isAdj=true;};
+
+    int getType() const{
+        if(_isStart){return 1;}
+        else if(_isAdj){return 2;}
+        else return 3;
+    }
 
     void setStartNode();
     void setEndNode();
@@ -39,6 +49,12 @@ private:
     double _weight;
 
     bool _isMarked;
+
+    bool _isStart = false;
+
+    bool _isEnd = false;
+
+    bool _isAdj = false;
 
     adjNode *_next;
 

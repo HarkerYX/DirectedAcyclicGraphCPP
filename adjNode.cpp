@@ -5,13 +5,22 @@
 #include "adjNode.hpp"
 
 
-adjNode::adjNode(int client, int startDate, int endDate, double weight){
+adjNode::adjNode(int client, int startDate, int endDate, double weight, int nodeType){
     _clientNumber = client;
     _startDate = startDate;
     _endDate = endDate;
     _weight = weight;
     _isMarked = false;
     _next = nullptr;
+    if(nodeType == 1){
+        _isStart = true;
+    }
+    if(nodeType == 2){
+        _isAdj = true;
+    }
+    if(nodeType == 3){
+        _isEnd = true;
+    }
 };
 
 
