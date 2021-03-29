@@ -24,6 +24,8 @@ class DirectedAcyclicGraph{
         bool getValue(int n);
         void setValue(int n);
 
+        unsigned long long numClients(){return adjList.size()-2;};
+
         void topSort();
         void topSortUtil(int v);
         std::vector<int> answer;

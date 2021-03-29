@@ -1,1 +1,3 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -g -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names  CMakeFiles/cs415Project2.dir/main.cpp.o CMakeFiles/cs415Project2.dir/adjNode.cpp.o CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.o CMakeFiles/cs415Project2.dir/CustomerInfo.cpp.o CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.o  -o cs415Project2 
+"C:\Program Files\JetBrains\CLion 2020.2\bin\cmake\win\bin\cmake.exe" -E rm -f CMakeFiles\cs415Project2.dir/objects.a
+C:\PROGRA~1\MINGW-~1\mingw64\bin\ar.exe cr CMakeFiles\cs415Project2.dir/objects.a @CMakeFiles\cs415Project2.dir\objects1.rsp
+C:\PROGRA~1\MINGW-~1\mingw64\bin\G__~1.EXE -g   -Wl,--whole-archive CMakeFiles\cs415Project2.dir/objects.a -Wl,--no-whole-archive  -o cs415Project2.exe -Wl,--out-implib,libcs415Project2.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\cs415Project2.dir\linklibs.rsp

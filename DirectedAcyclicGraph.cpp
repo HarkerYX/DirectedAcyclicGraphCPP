@@ -49,7 +49,7 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
     }
 
 
-    std::cout << "Initial adjacency list built...\nBuilding End...\n";
+//    std::cout << "Initial adjacency list built...\nBuilding End...\n";
 
     //populate end
     auto *currentPlaceInEndList = adjList.at(adjList.size()-1);
@@ -62,7 +62,7 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
         }
     }
 
-    std::cout << "End node built..\nBuilding Start node...\n";
+//    std::cout << "End node built..\nBuilding Start node...\n";
 
     //populate start
 
@@ -141,15 +141,7 @@ std::vector<int> DirectedAcyclicGraph::neighbors(int clientNum){
     }
 
     return result;
-//    std::vector<adjNode *> neighborVec;
-//
-//    adjNode *getNeighborsOf = adjList.at(clientNum);
-//
-//    while(getNeighborsOf != nullptr){
-//        neighborVec.emplace_back(getNeighborsOf);
-//        getNeighborsOf = getNeighborsOf->next();
-//    }
-//    return neighborVec;
+
 }
 
 std::vector<adjNode *> DirectedAcyclicGraph::getAdjList(){
