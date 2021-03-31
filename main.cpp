@@ -209,6 +209,8 @@ int main() {
 
     userOutput.close();
 
+    //Want to see the adjacency list representation printed out to a text file? Uncomment this!
+
 //std::cout << "\n\n=============================================================" << std::endl;
 //
 //    std::string userGraph;

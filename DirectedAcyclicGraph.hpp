@@ -26,20 +26,12 @@ class DirectedAcyclicGraph{
 
         unsigned long long numClients(){return adjList.size()-2;};
 
-        void topSort();
-        void topSortUtil(int v);
-        std::vector<int> answer;
         std::vector<adjNode *> getAdjList();
 
         int getNodeType(int v);
 
     private:
         std::vector<adjNode *> adjList;
-        std::vector<std::vector<adjNode>> adjMatrix;
-        std::vector<std::vector<int>> edgeMatrix;
-
-    std::vector<bool> visited;
-
 
     };
 
