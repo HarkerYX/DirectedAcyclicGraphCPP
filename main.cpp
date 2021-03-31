@@ -51,7 +51,7 @@ void topHelp(DirectedAcyclicGraph graph, int v, std::vector<adjNode *> &someVec)
         }
     }
     someVec.emplace_back(graph.getAdjList().at(v));
-    std::cout << graph.getAdjList().at(v)->getStartDate() << " " << graph.getAdjList().at(v)->getEndDate()  << " , ";
+//    std::cout << graph.getAdjList().at(v)->getStartDate() << " " << graph.getAdjList().at(v)->getEndDate()  << " , ";
 }
 
 void topSortDFS(DirectedAcyclicGraph graph, std::vector<adjNode *> &sortVector){
@@ -158,7 +158,7 @@ void topSortDFS(DirectedAcyclicGraph graph, std::vector<adjNode *> &sortVector){
 //}
 
 
-unsigned long long findOptimalPath(std::vector<adjNode *> topSortedVec){
+void findOptimalPath(std::vector<adjNode *> topSortedVec){
     std::vector<adjNode *> copyOf = topSortedVec;
 
     std::vector<int> contributorsIndex;
@@ -210,9 +210,9 @@ unsigned long long findOptimalPath(std::vector<adjNode *> topSortedVec){
     int idxOfMax = std::distance(maxNeighborForClients.begin(), std::max_element(maxNeighborForClients.begin(), maxNeighborForClients.end()));
 
 
-    std::cout << maxNeighborForClients.at(idxOfMax) << std::endl;
+    std::cout << "Optimal revenue earned is " << maxNeighborForClients.at(idxOfMax) << std::endl;
 
-    std::cout << "contributing neighbors:\n";
+    std::cout << "Clients contributing to this optimal revenue: ";
 
     std::vector<int> contribClients;
     int startClient;
@@ -257,8 +257,11 @@ bool tortuga = true;
 
 //    contribClients.push_back(clientList.at(idxOfMax-1).front());
 
-    for(int contribClient : contribClients){
-        std::cout << contribClient << ", ";
+    for(int i=0; i<contribClients.size(); i++){
+        std::cout << contribClients.at(i);
+        if(i != contribClients.size()-1){
+            std::cout << ",";
+        }
     }
 
 }
@@ -303,30 +306,30 @@ int main(int argc, char *argv[]) {
 
 
     // UNCOMMENT BELOW THIS LINE TO OUTPUT THE ADJACENCY LIST REPRESENTATION TO A FILE
-    std::cout << "\n------------------\n\nAdjacency List:\n\n";
-    std::ofstream graphWriter;
-    graphWriter.open("Graph.txt");
-    for (int i = 0; i < dagGraph.nodeCount() + 2; i++) {
-        std::vector<int> neighbVec = dagGraph.neighbors(i);
-        if (dagGraph.getAdjList().at(i)->getType() == 2) {
-            graphWriter << "[" << dagGraph.getAdjList().at(i)->getStartDate() << ", "
-                      << dagGraph.getAdjList().at(i)->getEndDate() << "]" << " Neighbors: ";
-        } else if (dagGraph.getAdjList().at(i)->getType() == 1) {
-            graphWriter << "[" << "START" << "]" << " Neighbors: ";
-        } else {
-            graphWriter << "[" << "END" << "]" << " Neighbors: ";
-
-        }
-        for (int j : neighbVec) {
-            graphWriter << "[" << dagGraph.getAdjList().at(j)->getClientNumber() << ", " << dagGraph.getAdjList().at(j)->getStartDate() << ", "
-                      << dagGraph.getAdjList().at(j)->getEndDate() << ", " <<
-                      dagGraph.getAdjList().at(j)->getWeight() << "]  " << "----> ";
-
-        }
-        graphWriter << "|" << std::endl;
-    }
-
-    graphWriter.close();
+//    std::cout << "\n------------------\n\nAdjacency List:\n\n";
+//    std::ofstream graphWriter;
+//    graphWriter.open("Graph.txt");
+//    for (int i = 0; i < dagGraph.nodeCount() + 2; i++) {
+//        std::vector<int> neighbVec = dagGraph.neighbors(i);
+//        if (dagGraph.getAdjList().at(i)->getType() == 2) {
+//            graphWriter << "[" << dagGraph.getAdjList().at(i)->getStartDate() << ", "
+//                      << dagGraph.getAdjList().at(i)->getEndDate() << "]" << " Neighbors: ";
+//        } else if (dagGraph.getAdjList().at(i)->getType() == 1) {
+//            graphWriter << "[" << "START" << "]" << " Neighbors: ";
+//        } else {
+//            graphWriter << "[" << "END" << "]" << " Neighbors: ";
+//
+//        }
+//        for (int j : neighbVec) {
+//            graphWriter << "[" << dagGraph.getAdjList().at(j)->getClientNumber() << ", " << dagGraph.getAdjList().at(j)->getStartDate() << ", "
+//                      << dagGraph.getAdjList().at(j)->getEndDate() << ", " <<
+//                      dagGraph.getAdjList().at(j)->getWeight() << "]  " << "----> ";
+//
+//        }
+//        graphWriter << "|" << std::endl;
+//    }
+//
+//    graphWriter.close();
 
     std::cout << "There are " << dagGraph.numClients() << " clients in this file." << std::endl;
 
