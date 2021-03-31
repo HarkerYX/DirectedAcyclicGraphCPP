@@ -196,33 +196,6 @@ DirectedAcyclicGraph.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs415Project2.dir\build.make CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.s
 .PHONY : DirectedAcyclicGraph.cpp.s
 
-LinkedQueue.obj: LinkedQueue.cpp.obj
-
-.PHONY : LinkedQueue.obj
-
-# target to build an object file
-LinkedQueue.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs415Project2.dir\build.make CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.obj
-.PHONY : LinkedQueue.cpp.obj
-
-LinkedQueue.i: LinkedQueue.cpp.i
-
-.PHONY : LinkedQueue.i
-
-# target to preprocess a source file
-LinkedQueue.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs415Project2.dir\build.make CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.i
-.PHONY : LinkedQueue.cpp.i
-
-LinkedQueue.s: LinkedQueue.cpp.s
-
-.PHONY : LinkedQueue.s
-
-# target to generate assembly for a file
-LinkedQueue.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\cs415Project2.dir\build.make CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.s
-.PHONY : LinkedQueue.cpp.s
-
 adjNode.obj: adjNode.cpp.obj
 
 .PHONY : adjNode.obj
@@ -292,9 +265,6 @@ help:
 	@echo ... DirectedAcyclicGraph.obj
 	@echo ... DirectedAcyclicGraph.i
 	@echo ... DirectedAcyclicGraph.s
-	@echo ... LinkedQueue.obj
-	@echo ... LinkedQueue.i
-	@echo ... LinkedQueue.s
 	@echo ... adjNode.obj
 	@echo ... adjNode.i
 	@echo ... adjNode.s

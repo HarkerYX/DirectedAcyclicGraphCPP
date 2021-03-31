@@ -9,10 +9,6 @@ CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.obj: ../DirectedAcyclicGra
 CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.obj: ../DirectedAcyclicGraph.hpp
 CMakeFiles/cs415Project2.dir/DirectedAcyclicGraph.cpp.obj: ../adjNode.hpp
 
-CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.obj: ../LinkedQueue.cpp
-CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.obj: ../LinkedQueue.hpp
-CMakeFiles/cs415Project2.dir/LinkedQueue.cpp.obj: ../adjNode.hpp
-
 CMakeFiles/cs415Project2.dir/adjNode.cpp.obj: ../adjNode.cpp
 CMakeFiles/cs415Project2.dir/adjNode.cpp.obj: ../adjNode.hpp
 
