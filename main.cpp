@@ -51,7 +51,7 @@ void topHelp(DirectedAcyclicGraph graph, int v, std::vector<adjNode *> &someVec)
         }
     }
     someVec.emplace_back(graph.getAdjList().at(v));
-//    std::cout << graph.getAdjList().at(v)->getStartDate() << " " << graph.getAdjList().at(v)->getEndDate()  << " , ";
+    std::cout << graph.getAdjList().at(v)->getStartDate() << " " << graph.getAdjList().at(v)->getEndDate()  << " , ";
 }
 
 void topSortDFS(DirectedAcyclicGraph graph, std::vector<adjNode *> &sortVector){
@@ -67,71 +67,200 @@ void topSortDFS(DirectedAcyclicGraph graph, std::vector<adjNode *> &sortVector){
 
 }
 
+//unsigned long long findOptimalPath(std::vector<adjNode *> topSortedVec){
+//    std::vector<int> endingNodes;
+//    std::map<int, unsigned long long> visitedMap;
+//    std::map<int, std::vector<int>> tryThis;
+//    std::map<double, int> calculatedClients;
+//
+//    std::map<double, int> clientsUsed;
+//
+//    std::vector<int> pathway;
+//    for(int i = 0; i < topSortedVec.size(); i++){
+//        clientsUsed[topSortedVec.at(i)->getWeight()] = topSortedVec.at(i)->getClientNumber();
+//    }
+//
+//
+//
+//    std::vector<unsigned long long> weightsOfPath;
+//
+//    //Weights of path added to a vector.
+//
+//    for(int i = 0; i < topSortedVec.size(); i++){
+//        adjNode *tempNode = topSortedVec.at(i);
+//        adjNode *tempNodePlace = topSortedVec.at(i);
+//
+//        std::vector<int> pathFromNode;
+//
+//
+//        if(topSortedVec.at(i)->next() == nullptr ){
+//
+//            weightsOfPath.emplace_back(topSortedVec.at(i)->getWeight());
+//            visitedMap[topSortedVec.at(i)->getClientNumber()] = topSortedVec.at(i)->getWeight();
+//            endingNodes.emplace_back(topSortedVec.at(i)->getClientNumber());
+//
+//            tryThis[topSortedVec.at(i)->getClientNumber()].emplace_back(topSortedVec.at(i)->getClientNumber());
+//
+//
+//        }
+//
+//        else{
+//            std::vector<unsigned long long> takeMaxOf;
+//            double addToMax = tempNode->getWeight();
+//
+//            double bigCurr = tempNode->getWeight();
+//            int currBig = tempNode->next()->getClientNumber();
+//            pathFromNode.emplace_back(tempNodePlace->getClientNumber());
+//
+//            while(tempNode != nullptr){
+//                tempNode = tempNode->next();
+//                if(tempNode != nullptr) {
+//                    takeMaxOf.emplace_back(visitedMap[tempNode->getClientNumber()]);
+//                    if(tempNode->getWeight() > bigCurr){
+//                        currBig = tempNode->getClientNumber();
+//                    }
+//                }
+//
+//            }
+//            tryThis[topSortedVec.at(i)->getClientNumber()].emplace_back(currBig);
+//
+//
+//            double max = *std::max_element(takeMaxOf.begin(), takeMaxOf.end());
+////            calculatedClients[max] = tempNodePlace->getClientNumber();
+//            addToMax = addToMax + max;
+//            visitedMap[tempNodePlace->getClientNumber()] = addToMax;
+//
+//            weightsOfPath.emplace_back(addToMax);
+//        }
+//
+//    }
+//
+//    int idxOfMax = std::distance(weightsOfPath.begin(), std::max_element(weightsOfPath.begin(), weightsOfPath.end()));
+//    pathway.emplace_back(-1);
+//    while( idxOfMax < topSortedVec.size() && topSortedVec.at(idxOfMax)->getClientNumber() != pathway.back() && !(std::find(pathway.begin(), pathway.end(), topSortedVec.at(idxOfMax)->getClientNumber()) != pathway.end()) ) {
+//
+//        pathway.emplace_back(topSortedVec.at(idxOfMax)->getClientNumber());
+//
+//        idxOfMax = tryThis[topSortedVec.at(idxOfMax)->getClientNumber()].at(0);
+//
+//    }
+//    if(idxOfMax >= topSortedVec.size() && pathway.back() != idxOfMax){
+//        pathway.emplace_back(idxOfMax);
+//    };
+//    std::cout << "The clients contributing to this revenue are: ";
+//    for(int i = 1; i < pathway.size(); i++){
+//        std::cout << pathway.at(i) << " ";
+//        if(i != pathway.size()-1){std::cout << ", ";}
+//    }
+//    unsigned long long maxProfit = *std::max_element(weightsOfPath.begin(), weightsOfPath.end());
+//    std::cout << "Max profit is: " << maxProfit << std::endl;
+//    return maxProfit;
+//}
+
+
 unsigned long long findOptimalPath(std::vector<adjNode *> topSortedVec){
-    std::vector<int> endingNodes;
-    std::map<int, unsigned long long> visitedMap;
+    std::vector<adjNode *> copyOf = topSortedVec;
 
-    std::map<double, int> calculatedClients;
+    std::vector<int> contributorsIndex;
 
-    std::map<double, int> clientsUsed;
+    std::map<int, int> calculatedSoFar;
 
-    for(int i = 0; i < topSortedVec.size(); i++){
-        clientsUsed[topSortedVec.at(i)->getWeight()] = topSortedVec.at(i)->getClientNumber();
+    std::vector<int> maxNeighborForClients(topSortedVec.size(), 0);
+
+    std::vector<std::list<int>> clientList;
+
+    for(auto & i : topSortedVec){
+        std::list<int> appToVec(1, i->getClientNumber());
+        clientList.emplace_back(appToVec);
     }
 
+    for(int i=0; i< topSortedVec.size(); i++){
 
+        if(topSortedVec.at(i)->next() == nullptr){
+            calculatedSoFar[topSortedVec.at(i)->getClientNumber()] = topSortedVec.at(i)->getWeight();
+            maxNeighborForClients[i]=topSortedVec.at(i)->getWeight();
+        }
+        else{
+            std::vector<int> currNeighbors;
+            std::vector<adjNode *> neighborVector;
+            adjNode *currPlace = topSortedVec.at(i)->next();
+            double weightCheck = currPlace->getWeight();
+            int maxNeighbor = currPlace->getClientNumber();
 
-    std::vector<unsigned long long> weightsOfPath;
+            while(currPlace != nullptr){
+               currNeighbors.emplace_back(calculatedSoFar[currPlace->getClientNumber()]);
+               neighborVector.emplace_back(currPlace);
+               if(weightCheck < calculatedSoFar[currPlace->getClientNumber()]){
+                   weightCheck = currPlace->getWeight();
+                   maxNeighbor = currPlace->getClientNumber();
+               }
 
-    //Weights of path added to a vector.
+                currPlace = currPlace->next();
+            }
+            clientList.at(i).emplace_back(maxNeighbor);
 
-    for(int i = 0; i < topSortedVec.size(); i++){
-        adjNode *tempNode = topSortedVec.at(i);
-        adjNode *tempNodePlace = topSortedVec.at(i);
-
-        std::vector<int> pathFromNode;
-
-
-        if(topSortedVec.at(i)->next() == nullptr ){
-
-            weightsOfPath.emplace_back(topSortedVec.at(i)->getWeight());
-            visitedMap[topSortedVec.at(i)->getClientNumber()] = topSortedVec.at(i)->getWeight();
-            endingNodes.emplace_back(topSortedVec.at(i)->getClientNumber());
-
-
+            int maxOfNeighbors = *std::max_element(currNeighbors.begin(), currNeighbors.end());
+            calculatedSoFar[topSortedVec.at(i)->getClientNumber()] = maxOfNeighbors + topSortedVec.at(i)->getWeight();
+            maxNeighborForClients[i]=maxOfNeighbors + topSortedVec.at(i)->getWeight();
+            currNeighbors.clear();
 
         }
 
-        else{
-            std::vector<unsigned long long> takeMaxOf;
-            double addToMax = tempNode->getWeight();
+    }
+    int idxOfMax = std::distance(maxNeighborForClients.begin(), std::max_element(maxNeighborForClients.begin(), maxNeighborForClients.end()));
 
-            pathFromNode.emplace_back(tempNodePlace->getClientNumber());
 
-            while(tempNode != nullptr){
-                tempNode = tempNode->next();
-                if(tempNode != nullptr) {
-                    takeMaxOf.emplace_back(visitedMap[tempNode->getClientNumber()]);
+    std::cout << maxNeighborForClients.at(idxOfMax) << std::endl;
 
-                }
+    std::cout << "contributing neighbors:\n";
 
+    std::vector<int> contribClients;
+    int startClient;
+    int startHere;
+//    for(int i = 0; i < clientList.size(); i++){
+//        if(clientList.at(i).front() == idxOfMax){
+            startClient = clientList.at(idxOfMax).front();
+            contribClients.push_back(startClient);
+            startHere = idxOfMax;
+//        }
+//    }
+//    while(idxOfMax < clientList.size() && clientList.at(idxOfMax).size() != 1){
+//        int goTo = clientList.at(idxOfMax).back();
+//        contribClients.push_back(goTo);
+//        idxOfMax = goTo;
+//    }
+//    contribClients.push_back(clientList.at(idxOfMax-1).front());
+
+bool tortuga = true;
+
+    while( tortuga){
+
+        for(int i = 0; i < clientList.size(); i++){
+            if(clientList.at(i).front() == startClient && clientList.at(i).size() == 1){
+                tortuga = false;
+                break;
+            }
+            else if(clientList.at(i).front() == startClient){
+
+                startClient = clientList.at(i).back();
+                contribClients.push_back(startClient);
             }
 
-
-            double max = *std::max_element(takeMaxOf.begin(), takeMaxOf.end());
-//            calculatedClients[max] = tempNodePlace->getClientNumber();
-            addToMax = addToMax + max;
-            visitedMap[tempNodePlace->getClientNumber()] = addToMax;
-
-            weightsOfPath.emplace_back(addToMax);
         }
 
+
+//        int goTo = clientList.at(idxOfMax).back();
+//        contribClients.push_back(goTo);
+//        idxOfMax = goTo;
     }
 
 
-    unsigned long long maxProfit = *std::max_element(weightsOfPath.begin(), weightsOfPath.end());
+//    contribClients.push_back(clientList.at(idxOfMax-1).front());
 
-    return maxProfit;
+    for(int contribClient : contribClients){
+        std::cout << contribClient << ", ";
+    }
+
 }
 
 
@@ -207,7 +336,9 @@ int main(int argc, char *argv[]) {
 
     std::cout << "\n";
 
-    std::cout << "Max profit: " << findOptimalPath(topSorted) << std::endl;
+//    std::cout << "Max profit: " << findOptimalPath(topSorted) << std::endl;
+
+    findOptimalPath(topSorted);
 
 
 

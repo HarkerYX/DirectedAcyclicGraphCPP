@@ -24,7 +24,7 @@ DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec)
     //Put the end node on
     adjList.emplace_back(endNode);
     //Build the list
-    for(int i = 1; i<inputVec.size(); i++){
+    for(int i = 0; i<inputVec.size(); i++){
 
 
         for(int j = 1; j < adjList.size()-1; j++) {
