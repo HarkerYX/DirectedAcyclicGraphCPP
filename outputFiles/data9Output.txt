@@ -1,0 +1,5 @@
+Input read from: ./data/data9.txt
+
+There are 10001 clients in this file.
+Optimal revenue: 46597
+Clients contributing to the optimal revenue: 1479,1,3,6,47,5490,4165,9761

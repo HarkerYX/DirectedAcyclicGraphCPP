@@ -3,8 +3,7 @@
 //
 
 #include "DirectedAcyclicGraph.hpp"
-#include "adjNode.hpp"
-#include <iostream>
+
 
 DirectedAcyclicGraph::DirectedAcyclicGraph(std::vector<CustomerInfo *> inputVec) {
     std::vector<adjNode *> nodeVector;
@@ -89,7 +88,6 @@ std::vector<int> DirectedAcyclicGraph::neighbors(int clientNum){
     std::vector<int> result;
     adjNode *getNeighborsOf = adjList.at(clientNum)->next();
 
-
     while(getNeighborsOf != nullptr){
         result.emplace_back(getNeighborsOf->getClientNumber());
         getNeighborsOf = getNeighborsOf->next();
@@ -101,13 +99,6 @@ std::vector<int> DirectedAcyclicGraph::neighbors(int clientNum){
 
 std::vector<adjNode *> DirectedAcyclicGraph::getAdjList(){
     return adjList;
-}
-
-
-
-
-int DirectedAcyclicGraph::getNodeType(int v) {
-    return adjList.at(v)->getType();
 }
 
 bool DirectedAcyclicGraph::getValue(int n) {

@@ -11,7 +11,7 @@ public:
     int startDate();
     int endDate();
     double weight();
-    void print();
+
     int custNumber();
 
 private:

@@ -24,23 +24,22 @@ adjNode::adjNode(int client, int startDate, int endDate, double weight, int node
 };
 
 
-
 void adjNode::setStartNode(){
     _clientNumber = 0;
     _startDate = 0;
     _endDate = 0;
     _weight = 0;
     _isMarked = false;
-};
+}
 
-void adjNode::setEndNode(){
 
-};
+void adjNode::next (adjNode *node){_next = node;}
 
-void adjNode::next (adjNode *node){_next = node;};
+
 adjNode *adjNode::next(){
     return _next;
 }
+
 
 adjNode::adjNode() {
     _clientNumber = 0;
@@ -50,6 +49,7 @@ adjNode::adjNode() {
     _isMarked = false;
     _next = nullptr;
 }
+
 
 void adjNode::setMarked() {
     bool currmarked = _isMarked;
@@ -61,6 +61,7 @@ void adjNode::setClientNumber(int client){_clientNumber=client;}
 void adjNode::setStartDate(int startDate){_startDate=startDate;}
 void adjNode::setEndDate(int endDate){_endDate=endDate;}
 void adjNode::setWeight(int weight){_weight = weight;}
+
 
 int adjNode::getClientNumber(){return _clientNumber;}
 int adjNode::getStartDate(){return _startDate;}

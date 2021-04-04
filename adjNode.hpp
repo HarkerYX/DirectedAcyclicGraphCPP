@@ -35,7 +35,7 @@ public:
     }
 
     void setStartNode();
-    void setEndNode();
+
 
     adjNode *next();
     void next (adjNode *node);

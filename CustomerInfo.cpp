@@ -17,6 +17,4 @@ int CustomerInfo::endDate(){return _endDate;}
 double CustomerInfo::weight(){return _weight;}
 
 int CustomerInfo::custNumber() {return _custNumber;}
-void CustomerInfo::print(){
-    std::cout << startDate() << " " << endDate() << " " << weight() << std::endl;
-}
+

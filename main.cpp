@@ -9,7 +9,8 @@
 #include "DirectedAcyclicGraph.hpp"
 
 //Creates the vector of customer info.
-std::vector<CustomerInfo *>createCustomerInfoVector(const std::string& fileRead){
+std::vector<CustomerInfo *>createCustomerInfoVector(const std::string& input){
+
     std::vector<CustomerInfo *> custInfo;
     int startDate, endDate;
     double weight;
@@ -18,12 +19,17 @@ std::vector<CustomerInfo *>createCustomerInfoVector(const std::string& fileRead)
 
     std::ifstream  inputFile;
 
-    inputFile.open("./data/" +fileRead);
+    inputFile.open(input, std::ios::in);
 
-    if(inputFile.fail()){
-        std::cout << "File does not exit or is not in the 'data' directory...terminating...";
-        exit(1);
+    if( ! inputFile.is_open()) {
+        std::cout << "Unable top open input file..." << "Terminating...";
+
+        exit(2);
     }
+//    if(inputFile.fail()){
+//        std::cout << "File does not exist or is not in the 'data' directory...terminating...";
+//        exit(1);
+//    }
 
     while(inputFile >> startDate && inputFile >> endDate && inputFile >> weight){
         auto *customersInfo = new CustomerInfo(custNumber, startDate, endDate, weight);
@@ -116,8 +122,8 @@ std::vector<int> findOptimalPath(std::vector<adjNode *> topSortedVec, int &rev){
 
 
     std::cout << "Optimal revenue earned is " << maxNeighborForClients.at(idxOfMax) << std::endl;
-
-    rev = maxNeighborForClients.at(idxOfMax);
+//
+//    rev = maxNeighborForClients.at(idxOfMax);
 
     std::cout << "Clients contributing to this optimal revenue: ";
 
@@ -144,28 +150,24 @@ std::vector<int> findOptimalPath(std::vector<adjNode *> topSortedVec, int &rev){
             }
         }
     }
-
-//    for(int i=0; i<contribClients.size(); i++){
-//        std::cout << contribClients.at(i);
-//        if(i != contribClients.size()-1){
-//            std::cout << ",";
-//        }
-//    }
-
     return contribClients;
-
 }
 
 
-int main() {
+int main(int argc, char *argv[]) {
 
-    std::string userInput;
-    std::cout << std::endl;
-    std::cout << "Welcome! Please make sure the file you want to read data from is in the 'data' folder. " << std::endl;
-//    std::cout << "If you'd like to see the adjacency list representation of the graph output in a text file, uncomment lines 178-201 of main.cpp and rerun the program." << std::endl;
-    std::cout << std::endl;
-    std::cout << "Please enter the name of the data file (i.e. data1) to read from: ";
-    std::cin >> userInput;
+
+    //Check to make sure a file has been passed in as an argument
+    if( argc != 2 ) {
+        std::cout << "usage: " << argv[0] << " nameOfAnInputFile" << std::endl;
+        exit(1);
+    }
+
+    std::string userInput(argv[1]);
+
+    //Strip file extension and format output file name
+    size_t lastIdx = userInput.find_last_of('.');
+    userInput = userInput.substr(0, lastIdx);
     std::string outputName = userInput + "Output.txt";
     userInput += ".txt";
 
@@ -173,7 +175,7 @@ int main() {
     std::vector<adjNode *> topSorted;
 
     //Put all customers info into a vector
-    std::vector<CustomerInfo *> allCustomerInfo= createCustomerInfoVector(userInput);
+    std::vector<CustomerInfo *> allCustomerInfo= createCustomerInfoVector(argv[1]);
 
 
     //Make the DAG -- ADJACENCY LIST REPRESENTATION
@@ -184,6 +186,7 @@ int main() {
     std::cout << "Input read from: " << userInput << "\n" <<  std::endl;
     std::cout << "There are " << dagGraph.numClients() << " clients in this file." << std::endl;
     topSortDFS(dagGraph, topSorted);
+
     std::cout << "\n";
     std::vector<int> result = findOptimalPath(topSorted, revenue);
         for(int i=0; i<result.size(); i++){
@@ -192,6 +195,12 @@ int main() {
             std::cout << ",";
         }
     }
+
+//        int revRev=0;
+//        for(int i=0; i < result.size(); i++){
+//            revRev += allCustomerInfo.at(result.at(i)-1)->weight();
+//        }
+//        std::cout << "\nOptimal Revenue Earned From Clients: " << revRev;
 
     std::ofstream userOutput;
     userOutput.open(outputName);
@@ -209,45 +218,47 @@ int main() {
 
     userOutput.close();
 
-    //Want to see the adjacency list representation printed out to a text file? Uncomment this!
+    //Ask user if they want to output the adjacency list representation in a txt file
+    std::cout << "\n=============================================================" << std::endl;
 
-//std::cout << "\n\n=============================================================" << std::endl;
-//
-//    std::string userGraph;
-//    std::cout << "\n\nWould you like to output the adjacency list representation to a text file?\n1.yes\n2.no" << std::endl;
-//    std::cin >> userGraph;
-//    if(userGraph == "1") {
-//        std::ofstream graphWriter;
-//        graphWriter.open("Graph.txt");
-//        for (int i = 0; i < dagGraph.nodeCount() + 2; i++) {
-//            std::vector<int> neighbVec = dagGraph.neighbors(i);
-//            if (dagGraph.getAdjList().at(i)->getType() == 2) {
-//                graphWriter << "[" << dagGraph.getAdjList().at(i)->getStartDate() << ", "
-//                            << dagGraph.getAdjList().at(i)->getEndDate() << "]" << " Neighbors: ";
-//            } else if (dagGraph.getAdjList().at(i)->getType() == 1) {
-//                graphWriter << "[" << "START" << "]" << " Neighbors: ";
-//            } else {
-//                graphWriter << "[" << "END" << "]" << " Neighbors: ";
-//
-//            }
-//            for (int j : neighbVec) {
-//                graphWriter << "[" << dagGraph.getAdjList().at(j)->getClientNumber() << ", "
-//                            << dagGraph.getAdjList().at(j)->getStartDate() << ", "
-//                            << dagGraph.getAdjList().at(j)->getEndDate() << ", " <<
-//                            dagGraph.getAdjList().at(j)->getWeight() << "]  " << "----> ";
-//
-//            }
-//            graphWriter << "|" << std::endl;
-//        }
-//
-//        graphWriter.close();
-//    }
-//
-//    else{
-//        std::cout << "Terminating...";
-//    }
+    std::string userGraph;
+    std::cout << "\nWould you like to output the adjacency list representation to a text file?\n1.yes\n2.no" << std::endl;
+    std::cin >> userGraph;
+    if(userGraph == "1") {
+        std::ofstream graphWriter;
+        graphWriter.open("Graph.txt");
+        for (int i = 0; i < dagGraph.nodeCount() + 2; i++) {
+            std::vector<int> neighbVec = dagGraph.neighbors(i);
+            if (dagGraph.getAdjList().at(i)->getType() == 2) {
+                graphWriter << "[" << dagGraph.getAdjList().at(i)->getStartDate() << ", "
+                            << dagGraph.getAdjList().at(i)->getEndDate() << "]" << " Neighbors: ";
+            } else if (dagGraph.getAdjList().at(i)->getType() == 1) {
+                graphWriter << "[" << "START" << "]" << " Neighbors: ";
+            } else {
+                graphWriter << "[" << "END" << "]" << " Neighbors: ";
+
+            }
+            for (int j : neighbVec) {
+                graphWriter << "[" << dagGraph.getAdjList().at(j)->getClientNumber() << ", "
+                            << dagGraph.getAdjList().at(j)->getStartDate() << ", "
+                            << dagGraph.getAdjList().at(j)->getEndDate() << ", " <<
+                            dagGraph.getAdjList().at(j)->getWeight() << "]  " << "----> ";
+
+            }
+            graphWriter << "|" << std::endl;
+        }
+
+        graphWriter.close();
+    }
+
+    else{
+        std::cout << "Terminating...";
+    }
 
 
     return 0;
 }
+
+
+
 

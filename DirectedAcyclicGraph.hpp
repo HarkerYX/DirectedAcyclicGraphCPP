@@ -28,7 +28,7 @@ class DirectedAcyclicGraph{
 
         std::vector<adjNode *> getAdjList();
 
-        int getNodeType(int v);
+
 
     private:
         std::vector<adjNode *> adjList;
