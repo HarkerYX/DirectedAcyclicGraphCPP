@@ -1,5 +1,0 @@
-Input read from: ./data/data1.txt
-
-There are 3 clients in this file.
-Optimal revenue: 220
-Clients contributing to the optimal revenue: 1,3

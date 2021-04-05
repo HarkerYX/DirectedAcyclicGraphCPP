@@ -1,5 +1,0 @@
-Input read from: ./data/data5.txt
-
-There are 21 clients in this file.
-Optimal revenue: 268
-Clients contributing to the optimal revenue: 10,1,5,12

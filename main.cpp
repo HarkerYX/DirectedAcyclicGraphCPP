@@ -51,6 +51,7 @@ void topHelp(DirectedAcyclicGraph graph, int v, std::vector<adjNode *> &someVec)
         }
     }
     someVec.emplace_back(graph.getAdjList().at(v));
+//    std::cout << graph.getAdjList().at(v)->getClientNumber() << " ,";
 //    std::cout << graph.getAdjList().at(v)->getStartDate() << " " << graph.getAdjList().at(v)->getEndDate()  << " , ";
 }
 
@@ -69,89 +70,162 @@ void topSortDFS(DirectedAcyclicGraph graph, std::vector<adjNode *> &sortVector){
 }
 
 //Optimal Path Finder
+
 std::vector<int> findOptimalPath(std::vector<adjNode *> topSortedVec, int &rev){
-    std::vector<adjNode *> copyOf = topSortedVec;
+std::vector<adjNode *> tSorted = topSortedVec;
+    std::map<int, int> clientToCurrentWeight;
 
-    std::vector<int> contributorsIndex;
+    std::vector<std::list<int>> clientsAndMaxNeighbors;
 
-    std::map<int, int> calculatedSoFar;
-
-    std::vector<int> maxNeighborForClients(topSortedVec.size(), 0);
-
-    std::vector<std::list<int>> clientList;
-
-    for(auto & i : topSortedVec){
-        std::list<int> appToVec(1, i->getClientNumber());
-        clientList.emplace_back(appToVec);
+    for(int i = 0; i < topSortedVec.size(); i++){
+        clientToCurrentWeight[topSortedVec.at(i)->getClientNumber()] = topSortedVec.at(i)->getWeight();
+        std::list<int> appToVec(1, topSortedVec.at(i)->getClientNumber());
+        clientsAndMaxNeighbors.emplace_back(appToVec);
     }
 
-    for(int i=0; i< topSortedVec.size(); i++){
+    for(int i = 0; i < topSortedVec.size(); i++){
+        if(topSortedVec.at(i)->next() != nullptr){
+            adjNode* whereWeAt = topSortedVec.at(i);
+            adjNode* currPlace = topSortedVec.at(i)->next();
+            adjNode* currMax = topSortedVec.at(i)->next();
 
-        if(topSortedVec.at(i)->next() == nullptr){
-            calculatedSoFar[topSortedVec.at(i)->getClientNumber()] = topSortedVec.at(i)->getWeight();
-            maxNeighborForClients[i]=topSortedVec.at(i)->getWeight();
-        }
-        else{
-            std::vector<int> currNeighbors;
-            std::vector<adjNode *> neighborVector;
-            adjNode *currPlace = topSortedVec.at(i)->next();
-            double weightCheck = currPlace->getWeight();
-            int maxNeighbor = currPlace->getClientNumber();
 
             while(currPlace != nullptr){
-               currNeighbors.emplace_back(calculatedSoFar[currPlace->getClientNumber()]);
-               neighborVector.emplace_back(currPlace);
-               if(weightCheck < calculatedSoFar[currPlace->getClientNumber()]){
-                   weightCheck = currPlace->getWeight();
-                   maxNeighbor = currPlace->getClientNumber();
-               }
+                if(clientToCurrentWeight.find(currPlace->getClientNumber())->second > clientToCurrentWeight.find(currMax->getClientNumber())->second){
+                    currMax = currPlace;
+                }
 
                 currPlace = currPlace->next();
-            }
-            clientList.at(i).emplace_back(maxNeighbor);
 
-            int maxOfNeighbors = *std::max_element(currNeighbors.begin(), currNeighbors.end());
-            calculatedSoFar[topSortedVec.at(i)->getClientNumber()] = maxOfNeighbors + topSortedVec.at(i)->getWeight();
-            maxNeighborForClients[i]=maxOfNeighbors + topSortedVec.at(i)->getWeight();
-            currNeighbors.clear();
+            }
+            if(currMax->getClientNumber() != whereWeAt->getClientNumber()) {
+                clientToCurrentWeight.find(whereWeAt->getClientNumber())->second += clientToCurrentWeight.find(currMax->getClientNumber())->second;
+                clientsAndMaxNeighbors.at(i).emplace_back(currMax->getClientNumber());
+            }
 
         }
 
     }
-    int idxOfMax = std::distance(maxNeighborForClients.begin(), std::max_element(maxNeighborForClients.begin(), maxNeighborForClients.end()));
-
-
-    std::cout << "Optimal revenue earned is " << maxNeighborForClients.at(idxOfMax) << std::endl;
-//
-//    rev = maxNeighborForClients.at(idxOfMax);
-
-    std::cout << "Clients contributing to this optimal revenue: ";
-
-    std::vector<int> contribClients;
-    int startClient;
-    int startHere;
-    startClient = clientList.at(idxOfMax).front();
-    contribClients.push_back(startClient);
-    startHere = idxOfMax;
-
-    bool keepGoing = true;
-
-    while( keepGoing){
-
-        for(auto & i : clientList){
-            if(i.front() == startClient && i.size() == 1){
-                keepGoing = false;
-                break;
-            }
-            else if(i.front() == startClient){
-
-                startClient = i.back();
-                contribClients.push_back(startClient);
-            }
+    int currMax = 0;
+    int startingClient = 0;
+    for(auto it = clientToCurrentWeight.begin(); it != clientToCurrentWeight.end(); ++it){
+        if(it->second > currMax){
+            currMax = it->second;
+            startingClient = it->first;
         }
     }
-    return contribClients;
+    std::vector<int>returnDem;
+    returnDem.push_back(startingClient);
+    bool stop = true;
+   while(stop) {
+       for (int i = 0; i < clientsAndMaxNeighbors.size(); i++) {
+           if (startingClient == clientsAndMaxNeighbors.at(i).front() && clientsAndMaxNeighbors.at(i).size() != 1) {
+               startingClient = clientsAndMaxNeighbors.at(i).back();
+
+               returnDem.push_back(startingClient);
+
+               for(int j = 0; j <clientsAndMaxNeighbors.size(); j++){
+                   if(clientsAndMaxNeighbors.at(j).front()== startingClient && clientsAndMaxNeighbors.at(j).size() == 1 ){
+                       stop = false;
+                   }
+               }
+
+           }
+//           if(clientsAndMaxNeighbors.at(startingClient).size() == 1){ stop = false;}
+       }
+
+   }
+    std::cout << "OPTI profiT: " << currMax << std::endl;
+    std::vector<int> yep;
+
+    return yep;
+
 }
+
+
+//std::vector<int> findOptimalPath(std::vector<adjNode *> topSortedVec, int &rev){
+//    std::vector<adjNode *> copyOf = topSortedVec;
+//
+//    std::vector<int> contributorsIndex;
+//
+//    std::map<int, int> calculatedSoFar;
+//
+//    std::vector<int> maxNeighborForClients(topSortedVec.size(), 0);
+//
+//    std::vector<std::list<int>> clientList;
+//
+//    for(auto & i : topSortedVec){
+//        std::list<int> appToVec(1, i->getClientNumber());
+//        clientList.emplace_back(appToVec);
+//    }
+//
+//    for(int i=0; i< topSortedVec.size(); i++){
+//
+//        if(topSortedVec.at(i)->next() == nullptr){
+//            calculatedSoFar[topSortedVec.at(i)->getClientNumber()] = topSortedVec.at(i)->getWeight();
+//            maxNeighborForClients[i]=topSortedVec.at(i)->getWeight();
+//        }
+//        else{
+//            std::vector<int> currNeighbors;
+//            std::vector<adjNode *> neighborVector;
+//            adjNode *currPlace = topSortedVec.at(i)->next();
+//            double weightCheck = currPlace->getWeight();
+//            int maxNeighbor = currPlace->getClientNumber();
+//
+//            while(currPlace != nullptr){
+//               currNeighbors.emplace_back(calculatedSoFar[currPlace->getClientNumber()]);
+//               neighborVector.emplace_back(currPlace);
+//               if(weightCheck < calculatedSoFar[currPlace->getClientNumber()]){
+//                   weightCheck = currPlace->getWeight();
+//                   maxNeighbor = currPlace->getClientNumber();
+//               }
+//
+//                currPlace = currPlace->next();
+//            }
+//            clientList.at(i).emplace_back(maxNeighbor);
+//
+//            int maxOfNeighbors = *std::max_element(currNeighbors.begin(), currNeighbors.end());
+//            calculatedSoFar[topSortedVec.at(i)->getClientNumber()] = maxOfNeighbors + topSortedVec.at(i)->getWeight();
+//            maxNeighborForClients[i]=maxOfNeighbors + topSortedVec.at(i)->getWeight();
+//            currNeighbors.clear();
+//
+//        }
+//
+//    }
+//    int idxOfMax = std::distance(maxNeighborForClients.begin(), std::max_element(maxNeighborForClients.begin(), maxNeighborForClients.end()));
+//
+//
+//    std::cout << "Optimal revenue earned is " << maxNeighborForClients.at(idxOfMax) << std::endl;
+////
+////    rev = maxNeighborForClients.at(idxOfMax);
+//
+//    std::cout << "Clients contributing to this optimal revenue: ";
+//
+//    std::vector<int> contribClients;
+//    int startClient;
+//    int startHere;
+//    startClient = clientList.at(idxOfMax).front();
+//    contribClients.push_back(startClient);
+//    startHere = idxOfMax;
+//
+//    bool keepGoing = true;
+//
+//    while( keepGoing){
+//
+//        for(auto & i : clientList){
+//            if(i.front() == startClient && i.size() == 1){
+//                keepGoing = false;
+//                break;
+//            }
+//            else if(i.front() == startClient){
+//
+//                startClient = i.back();
+//                contribClients.push_back(startClient);
+//            }
+//        }
+//    }
+//    return contribClients;
+//}
 
 
 int main(int argc, char *argv[]) {
